@@ -3,13 +3,13 @@ import image_utils
 import losses
 from functools import partial
 import os
-#Content heavily based https://www.tensorflow.org/tutorials/generative/style_transfer
 
+#This script defines a lot of variables up front in order to keep all the controls in one place.
+
+#Where generated files go.
 GENERATED_FILEPATH = "generated"
 
-if GENERATED_FILEPATH not in os.listdir("."):
-    os.makedirs(GENERATED_FILEPATH, exist_ok=True)
-
+#Which layers are used to calculate loss.
 CONTENT_LAYERS = ['block4_conv2']
 STYLE_LAYERS = [
         'block1_conv1',
@@ -19,6 +19,9 @@ STYLE_LAYERS = [
         'block5_conv1'
         ]
 
+#What functions calculate loss - as well as what function to apply to style layers to capture style.
+#Default style function is gram_matrix, and losses are gatys_style_loss and gatys_content_loss.
+#See losses.py for function signatures.
 STYLE_FUNCTION = partial(losses.gram_matrix)#Partial is necessary if there are hyperparameters to pass to the function
 STYLE_LOSS = losses.gatys_style_loss
 CONTENT_LOSS = losses.gatys_content_loss
@@ -31,11 +34,13 @@ TOTAL_VARIATION_WEIGHT = 1e-6
 
 WEIGHTS = {'style': STYLE_WEIGHT, 'content': CONTENT_WEIGHT, 'variation': TOTAL_VARIATION_WEIGHT}
 
+#What sizes to do the coarse to fine adjustments with
 SIZES = [(600,600), (900, 900)]
+
 NUM_ITERATIONS = 5
 STEPS_PER_ITER = 100
 IMAGE_LIST = [
-        ("data/cat.jpg", "data/starry_night.jpg", "data/cat.jpg")
+        ("data/cat.jpg", "data/wave.jpg", "data/cat.jpg")
         ]
 
 ##########################################################################################
@@ -248,9 +253,17 @@ def generate_coarse_to_fine(image_paths, weights, sizes, num_iters=100, steps_pe
 def make_noise(shape=(224, 224)):
     return tf.random.uniform((1, shape[0], shape[1], 3), 0, 255)
 
-#feature_extractor = StyleContentModel(STYLE_LAYERS, CONTENT_LAYERS)
-
+#optimizer is used by the actual stepping function
 optimizer = OPTIMIZER
-#generate_coarse_to_fine(IMAGE_LIST, WEIGHTS, SIZES, NUM_ITERATIONS, STEPS_PER_ITER)
+generate_coarse_to_fine(IMAGE_LIST, WEIGHTS, SIZES, NUM_ITERATIONS, STEPS_PER_ITER)
 generate_coarse_to_fine(IMAGE_LIST, WEIGHTS, SIZES, NUM_ITERATIONS, STEPS_PER_ITER, "nomatch")
+generate_coarse_to_fine(IMAGE_LIST, WEIGHTS, SIZES, NUM_ITERATIONS, STEPS_PER_ITER, "match")
+
+IMAGE_LIST = [
+        ("data/cat.jpg", "data/brick.jpg", "data/cat.jpg")
+        ]
+
+generate_coarse_to_fine(IMAGE_LIST, WEIGHTS, SIZES, NUM_ITERATIONS, STEPS_PER_ITER, "nomatch")
+STYLE_FUNCTION = partial(losses.shifted_gram_matrix, 4)#Try again with adjustments to preserve straight lines.
+STYLE_LOSS = losses.shifted_gram_loss
 generate_coarse_to_fine(IMAGE_LIST, WEIGHTS, SIZES, NUM_ITERATIONS, STEPS_PER_ITER, "match")

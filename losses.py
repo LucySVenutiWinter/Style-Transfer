@@ -19,14 +19,7 @@ def gatys_content_loss(output_dict, target_dict):
 def gatys_style_loss(output_dict, target_dict, dim_dict):
     divisor_dict = {name: 4 * (dims[3] ** 2) * ((dims[1] * dims[2]) ** 2) for name, dims in dim_dict.items()}
     return tf.add_n([tf.reduce_sum(tf.square(output_dict[layer] - target_dict[layer])) / divisor_dict[layer] for layer in target_dict.keys()])
-#
-##The first few are for compatibility
-#def standard_content_loss(output_dict, target_dict):
-#    return tf.add_n([tf.reduce_mean(tf.square(output_dict[name] - target_dict[name])) for name in output_dict.keys()]) / 2
-#
-#def standard_style_loss(output_dict, target_dict, dim_dict):
-#    return tf.add_n([tf.reduce_sum(tf.square(output_dict[name] - target_dict[name])) / (4 * float(dim_dict[name][3] ** 2) * float(dim_dict[name][1] * dim_dict[name][2]) ** 2) for name in output_dict.keys()])
-#
+
 def shifted_gram_matrix(input_tensor, delta):
     """
     Returns a gram-like matrix formed when each index is multiplied by the one delta indices in both x and y dimensions.
