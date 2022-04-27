@@ -13,8 +13,6 @@ def load_image(filepath, size = None, img_dtype = tf.dtypes.uint8):
 
         image = image[tf.newaxis, :]# Adds an extra axis, as the network will expect the first index to be the example number
       
-        #image *= 255
-
         return image
 
 #Below functions are for luminance style transfer.
