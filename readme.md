@@ -10,7 +10,7 @@ Image style transfer has been around for a few years. This repository replicates
 
 Neural style transfer works by taking a content image and a style image and producing an output image containing the content of the first, rendered in the style of the second. The code in this repository uses an iterative method to do this, optimizing the image directly. More modern techniques instead train networks to output an image with the desired qualities. These techniques have largely supplanted the original algorithm, which is extremely slow, but generally use the same structure, with errors backpropagated through the output image into the network that produced it.
 
-The style image is commonly a famous photograph with a particularly striking style.
+The style image is commonly a famous painting with a particularly striking style.
 
 <p align="center">
 <img src="figures/wave_sml.png" alt="Image of the cat in the style of Hokusai's woodblock">
