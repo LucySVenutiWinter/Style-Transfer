@@ -1,7 +1,7 @@
 # Image style transfer #
 
 <p align="center">
-![alt text](figures/cat_leaves.png "Image of a cat in the style of a picture of autumn leaves")
+<img src="figures/cat_leaves.png" "Image of a cat in the style of a picture of autumn leaves")
 </p>
 
 Image style transfer has been around for a few years. This repository replicates the original technique, developed by Gatys et al, along with a couple of less well-known techniques. It requires TensorFlow, and runs much faster if CUDA is enabled (though the method is intrinsically expensive).
@@ -13,13 +13,13 @@ Neural style transfer works by taking a content image and a style image and prod
 The style image is commonly a famous photograph with a particularly striking style.
 
 <p align="center">
-![alt text](figures/wave_sml.png "Image of the cat in the style of Hokusai's woodblock")
+<img src="figures/wave_sml.png" alt="Image of the cat in the style of Hokusai's woodblock">
 </p>
 
 However, "style" is somewhat vague, and work preceding style transfer was generally about texture synthesis. It can sometimes be more useful to think of styles in terms of texture, when looking for what works. For example, a photograph of autumn leaves has great texture, which can create a striking photograph when transferred:
 
 <p align="center">
-![alt text](figures/leaves_sml.png "Image of the cat in the style of some leaves")
+<img src="figures/leaves_sml.png" alt="Image of the cat in the style of some leaves">
 </p>
 
 In fact, photographs can sometimes turn out better, because there are generally fewer strange artifacts due to jpeg compression or qualities that are intrinsic to the canvas instead of the image.
@@ -33,19 +33,19 @@ Because image size grows quadratically, it can be really expensive to produce la
 You might want to transfer an image's rough stylization while keeping the image's color intact. I'm surprised I haven't seen this technique more often, as it's applicable to every style transfer algorithm. To do this, an image is converted from RGB to YIQ format. The Y channel in YIQ is the image luminance, all color information is encoded in the I and Q channels.
 
 <p align="center">
-![alt text](figures/cat_lum_sml.png "Cat image with only the luminance channel")
+<img src="figures/cat_lum_sml.png" alt="Cat image with only the luminance channel">
 </p>
 
 Optionally, the image histograms of the luminance channels can be matched. This can result in better output if the style image has more or less variation than you want. On the left is the luminance-only version of the image with the leaves, which is somewhat muted (as most of the contrast was really in the color, not the saturation). On the right is that image, with its statistics matched to that of the cat photo, which has both bright textures and dark shadows.
 
 <p align="center">
-![alt text](figures/leaves_lum_cmp_sml.png "Comparison of histogram-matched and unmatched luminance")
+<img src="figures/leaves_lum_cmp_sml.png" alt="Comparison of histogram-matched and unmatched luminance">
 </p>
 
 If this is done with the content and style images, then transfer takes place on a grayscale version of the photos, without any color. The IQ channels which were extracted can then be mixed back into the final image, resulting in an image that shares the style of the style image, but with all color information coming from the content image. In this case, the histogram-matching was definitely worth it, as the picture with matching (right) turned out much better than the one without.
 
 <p align="center">
-![alt text](figures/cat_lum_cmp_sml.png "Comparison of histogram-matched and unmatched style-transfered images")
+<img src="figures/cat_lum_cmp_sml.png" alt="Comparison of histogram-matched and unmatched style-transfered images">
 </p>
 
 ## Running it ##
