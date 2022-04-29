@@ -27,20 +27,25 @@ STYLE_LOSS = losses.gatys_style_loss
 CONTENT_LOSS = losses.gatys_content_loss
 
 OPTIMIZER = tf.optimizers.Nadam(0.5)#We want to take large steps
-#Things appear to work really well with 1e-4, 2.5e-8, 1e-6
+#Things appear to work fairly well with 1e-4, 2.5e-8, 1e-6
 STYLE_WEIGHT = 1e-4
 CONTENT_WEIGHT = 2.5e-8
-TOTAL_VARIATION_WEIGHT = 1e-6
+TOTAL_VARIATION_WEIGHT = 1e-4
 
 WEIGHTS = {'style': STYLE_WEIGHT, 'content': CONTENT_WEIGHT, 'variation': TOTAL_VARIATION_WEIGHT}
 
 #What sizes to do the coarse to fine adjustments with
-SIZES = [(600,600), (900, 900)]
+SIZES = [(600, 600), (900, 900)]
 
-NUM_ITERATIONS = 5
+#Number of steps to do per algorithm iteration, and number of iterations to do.
+#The script will output the transferred image at the end of each iteration.
+NUM_ITERATIONS = 50
 STEPS_PER_ITER = 100
+
+#The images to use. (content, style, initial). If initial is None, then the algorithm will initialize the image with noise.
 IMAGE_LIST = [
-        ("data/cat.jpg", "data/wave.jpg", "data/cat.jpg")
+        ("data/pur.jpg", "data/leaves.jpg", "data/pur.jpg"),
+        ("data/pur.jpg", "data/wave.jpg", "data/pur.jpg")
         ]
 
 ##########################################################################################
@@ -199,7 +204,10 @@ def coarse_to_fine(images, paths, weights, sizes, num_iters=100, steps_per_iter=
     If lum is "match," then does luminance only transfer with histogram matching.
     """
     for new_size in sizes:
-        content_image, style_image, init_image = images
+        if new_size == sizes[0]:
+            content_image, style_image, init_image = images
+        else:
+            content_image, style_image, _ = images
         print("Now generating images at size " + str(new_size))
         content = tf.image.resize(content_image, new_size, preserve_aspect_ratio=True)
         if tf.reduce_max(style_image.shape) > max(new_size):
@@ -257,13 +265,4 @@ def make_noise(shape=(224, 224)):
 optimizer = OPTIMIZER
 generate_coarse_to_fine(IMAGE_LIST, WEIGHTS, SIZES, NUM_ITERATIONS, STEPS_PER_ITER)
 generate_coarse_to_fine(IMAGE_LIST, WEIGHTS, SIZES, NUM_ITERATIONS, STEPS_PER_ITER, "nomatch")
-generate_coarse_to_fine(IMAGE_LIST, WEIGHTS, SIZES, NUM_ITERATIONS, STEPS_PER_ITER, "match")
-
-IMAGE_LIST = [
-        ("data/cat.jpg", "data/brick.jpg", "data/cat.jpg")
-        ]
-
-generate_coarse_to_fine(IMAGE_LIST, WEIGHTS, SIZES, NUM_ITERATIONS, STEPS_PER_ITER, "nomatch")
-STYLE_FUNCTION = partial(losses.shifted_gram_matrix, 4)#Try again with adjustments to preserve straight lines.
-STYLE_LOSS = losses.shifted_gram_loss
 generate_coarse_to_fine(IMAGE_LIST, WEIGHTS, SIZES, NUM_ITERATIONS, STEPS_PER_ITER, "match")

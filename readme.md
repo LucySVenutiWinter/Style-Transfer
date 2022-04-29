@@ -1,5 +1,7 @@
 # Image style transfer #
 
+![alt text](figures/cat_leaves.png "Image of a cat in the style of a picture of autumn leaves")
+
 Image style transfer has been around for a few years. This repository replicates the original technique, developed by Gatys et al, along with a couple of less well-known techniques. It requires TensorFlow, and runs much faster if CUDA is enabled (though the method is intrinsically expensive).
 
 ## Algorithm ##
