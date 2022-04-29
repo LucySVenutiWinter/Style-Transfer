@@ -39,7 +39,7 @@ SIZES = [(600, 600), (900, 900)]
 
 #Number of steps to do per algorithm iteration, and number of iterations to do.
 #The script will output the transferred image at the end of each iteration.
-NUM_ITERATIONS = 50
+NUM_ITERATIONS = 5
 STEPS_PER_ITER = 100
 
 #The images to use. (content, style, initial). If initial is None, then the algorithm will initialize the image with noise.
@@ -75,6 +75,7 @@ layers = ['block1_conv1',
 
 ##########################################################################################
 
+#Removes the directory information from the filepath, getting just the filename
 def extract_path_tail(filepath):
     filepath = filepath.split("/")[-1]
     filepath = filepath.split(".")
