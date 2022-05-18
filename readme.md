@@ -49,3 +49,9 @@ If this is done with the content and style images, then transfer takes place on 
 To run the script on your own images, add tuples to the IMAGE_LIST variable in style_transfer.py and then run it in Python. The tuples should have three elements: the content file path, the style file path, and the initialization file path, in that order. Generally, the initialization should be the same as the content image pathname, but if you want to run more iterations on an already-transferred image, you may want to change it. If it's None, the algorithm will randomly initialize an image with noise and use that.
 
 By default, the algorithm will perform normal style transfer, then luminance with and without histogram matching. The last three lines of style_transfer.py are where this occurs. If you don't want to do all three, comment out the unwanted calls there.
+
+## References
+
+Gatys, L. A., Ecker, A. S., & Bethge, M. (2015). A neural algorithm of artistic style. *arXiv preprint arXiv:1508.06576.*
+
+Gatys, L. A., Ecker, A. S., Bethge, M., Hertzmann, A., & Shechtman, E. (2017). Controlling perceptual factors in neural style transfer. In *Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (pp. 3985-3993).*
